@@ -1,7 +1,7 @@
 #include "AHRS.h"
 using namespace std;
 
-void readFromCSVFiles(
+int readFromCSVFiles(
     string filename, float * gx, float * gy, float * gz,
     float * ax, float * ay, float * az, float * length) {
     ifstream data(filename);
@@ -49,6 +49,8 @@ void readFromCSVFiles(
         // update line counter;
         lcounter += 1;
     }
+
+    return lcounter;
 }
 
 int main() {
@@ -62,7 +64,7 @@ int main() {
     float length[MAX_INIT_ARRAY_SIZE] = { 0.0 };
 
     // init sensor data from CSV files
-    readFromCSVFiles("data/linear-motion-1.csv", gx, gy, gz, ax, ay, az, length);
+    int num = readFromCSVFiles("data/linear-motion-1.csv", gx, gy, gz, ax, ay, az, length);
 
-    
+    cout << "Total points: " << num << "\n";
 }

@@ -1,2 +1,6 @@
 # Directories
 data
+AHRS.dSYM
+
+# Files
+AHRS
