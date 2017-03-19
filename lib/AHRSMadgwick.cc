@@ -19,7 +19,7 @@
 //-------------------------------------------------------------------------------------------
 // Header files
 
-#include "MadgwickAHRS.h"
+#include "AHRSMadgwick.h"
 #include <math.h>
 
 //-------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@
 //-------------------------------------------------------------------------------------------
 // AHRS algorithm update
 
-Madgwick::Madgwick() {
+AHRSMadgwick::AHRSMadgwick() {
 	beta = betaDef;
 	q0 = 1.0f;
 	q1 = 0.0f;
@@ -44,7 +44,7 @@ Madgwick::Madgwick() {
 	anglesComputed = 0;
 }
 
-void Madgwick::update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
+void AHRSMadgwick::update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
 	float recipNorm;
 	float s0, s1, s2, s3;
 	float qDot1, qDot2, qDot3, qDot4;
@@ -149,7 +149,7 @@ void Madgwick::update(float gx, float gy, float gz, float ax, float ay, float az
 //-------------------------------------------------------------------------------------------
 // IMU algorithm update
 
-void Madgwick::updateIMU(float gx, float gy, float gz, float ax, float ay, float az) {
+void AHRSMadgwick::updateIMU(float gx, float gy, float gz, float ax, float ay, float az) {
 	float recipNorm;
 	float s0, s1, s2, s3;
 	float qDot1, qDot2, qDot3, qDot4;
@@ -227,7 +227,7 @@ void Madgwick::updateIMU(float gx, float gy, float gz, float ax, float ay, float
 // Fast inverse square-root
 // See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
 
-float Madgwick::invSqrt(float x) {
+float AHRSMadgwick::invSqrt(float x) {
 	float halfx = 0.5f * x;
 	float y = x;
 	long i = *(long*)&y;
@@ -240,7 +240,7 @@ float Madgwick::invSqrt(float x) {
 
 //-------------------------------------------------------------------------------------------
 
-void Madgwick::computeAngles()
+void AHRSMadgwick::computeAngles()
 {
 	roll = atan2f(q0*q1 + q2*q3, 0.5f - q1*q1 - q2*q2);
 	pitch = asinf(-2.0f * (q1*q3 - q0*q2));

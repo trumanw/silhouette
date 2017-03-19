@@ -14,13 +14,13 @@
 // 02/10/2011	SOH Madgwick	Optimised for reduced CPU load
 //
 //=============================================================================================
-#ifndef MadgwickAHRS_h
-#define MadgwickAHRS_h
+#ifndef AHRSMadgwick_h
+#define AHRSMadgwick_h
 #include <math.h>
 
 //--------------------------------------------------------------------------------------------
 // Variable declaration
-class Madgwick{
+class AHRSMadgwick{
 private:
     static float invSqrt(float x);
     float beta;				// algorithm gain
@@ -38,7 +38,7 @@ private:
 //-------------------------------------------------------------------------------------------
 // Function declarations
 public:
-    Madgwick(void);
+    AHRSMadgwick(void);
     void begin(float sampleFrequency) { invSampleFreq = 1.0f / sampleFrequency; }
     void update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
     void updateIMU(float gx, float gy, float gz, float ax, float ay, float az);
