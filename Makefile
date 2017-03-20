@@ -19,6 +19,9 @@ $(TARGET): $(OBJ)
 	$(CXX) -o $@ $^ $(CFLAGS)
 	$(RM) $(OBJ)
 
+anim: $(TARGET)
+	python plot.py
+
 .PHONY: clean
 clean:
 	$(RM) $(TARGET) $(OBJ)
