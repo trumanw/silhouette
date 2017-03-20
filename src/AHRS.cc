@@ -79,7 +79,6 @@ int main(int argc, char* argv[]) {
 
     // init sensor data from CSV files
     int num = readFromCSVFiles("data/" + filename, gx, gy, gz, ax, ay, az, length);
-    cout << filename << "\n";
 
     // calculate the length of the each rolling step
     for (int i = 0; i < num - 1; i++) {
@@ -93,14 +92,11 @@ int main(int argc, char* argv[]) {
     AHRSTracklet *tracklet = new AHRSTracklet(*filter);
 
     // iterately update the points of the trajectory into pl
-    for (int i = 0; i < num; i++) {
+    for (int i = 0; i < num-2; i++) {
         tracklet -> update(gx[i], gy[i], gz[i], ax[i], ay[i], az[i], length[i]);
         pl[i].x = tracklet -> getX();
         pl[i].y = tracklet -> getY();
         pl[i].z = tracklet -> getZ();
-        cout << "X: " << pl[i].x << " - Y: " << pl[i].y << " - Z: " << pl[i].z << " - Len: " << length[i] <<"\n";
+        cout << pl[i].x << "," << pl[i].y << "," << pl[i].z << "," << length[i] <<"\n";
     }
-
-    // malloc memory for keeping all the points of trajectory
-    cout << "Total points: " << num << "\n";
 }
