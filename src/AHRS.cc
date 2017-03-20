@@ -60,7 +60,13 @@ public:
     float z;
 };
 
-int main() {
+int main(int argc, char* argv[]) {
+    // read filename from command
+    string filename = "";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
     const int MAX_INIT_ARRAY_SIZE = 255;
     float gx[MAX_INIT_ARRAY_SIZE] = { 0.0 };
     float gy[MAX_INIT_ARRAY_SIZE] = { 0.0 };
@@ -72,7 +78,8 @@ int main() {
     Point pl[MAX_INIT_ARRAY_SIZE];
 
     // init sensor data from CSV files
-    int num = readFromCSVFiles("data/linear-motion-1.csv", gx, gy, gz, ax, ay, az, length);
+    int num = readFromCSVFiles("data/" + filename, gx, gy, gz, ax, ay, az, length);
+    cout << filename << "\n";
 
     // calculate the length of the each rolling step
     for (int i = 0; i < num - 1; i++) {
