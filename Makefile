@@ -8,7 +8,7 @@ CXX = clang++
 CFLAGS  = -g -Wall -lstdc++
 
 # the build target executable:
-TARGET = ahrs
+TARGET = silhouette
 CCSRC = $(wildcard src/lib/*.cc) \
 		$(wildcard src/*.cc)
 OBJ = $(CCSRC:.cc=.o)
@@ -17,6 +17,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJ)
 	$(CXX) -o $@ $^ $(CFLAGS)
+	$(RM) $(OBJ)
 
 .PHONY: clean
 clean:

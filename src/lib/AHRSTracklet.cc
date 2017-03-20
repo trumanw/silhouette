@@ -21,12 +21,9 @@ void AHRSTracklet::update(float gx, float gy, float gz, float ax, float ay, floa
     rotor.updateIMU(gx, gy, gz, ax, ay, az);
 
     // the product of rotor's quaternions and the unit quaternions (0, 0, 1, 0)
-    // float di = -rotor.q3 * length;
-    // float dj = rotor.q0 * length;
-    // float dk = rotor.q1 * length;
-    float di = -rotor.q3;
-    float dj = rotor.q0;
-    float dk = rotor.q1;
+    float di = -rotor.q3 * length;
+    float dj = rotor.q0 * length;
+    float dk = rotor.q1 * length;
 
     // new quaternions of tracklet
     q1 += di;
