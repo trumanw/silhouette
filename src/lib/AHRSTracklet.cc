@@ -13,19 +13,20 @@ AHRSTracklet::AHRSTracklet(AHRSMadgwick rotor, float sampleFrequency) {
     q2 = 0.0f;
     q3 = 0.0f;
     rotor = rotor;
-    if (rotor != null) {
-        begin(sampleFrequency);
-    }
+    begin(sampleFrequency);
 }
 
-AHRSTracklet::update(float gx, float gy, float gz, float ax, float ay, float az, float length) {
+void AHRSTracklet::update(float gx, float gy, float gz, float ax, float ay, float az, float length) {
     // update AHRS rotor
-    rotor.update(gx, gy, gz, ax, ay, az);
+    rotor.updateIMU(gx, gy, gz, ax, ay, az);
 
     // the product of rotor's quaternions and the unit quaternions (0, 0, 1, 0)
-    di = -rotor.q3 * length;
-    dj = rotor.q0 * length;
-    dk = rotor.q1 * length;
+    // float di = -rotor.q3 * length;
+    // float dj = rotor.q0 * length;
+    // float dk = rotor.q1 * length;
+    float di = -rotor.q3;
+    float dj = rotor.q0;
+    float dk = rotor.q1;
 
     // new quaternions of tracklet
     q1 += di;

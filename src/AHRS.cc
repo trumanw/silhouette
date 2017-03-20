@@ -53,6 +53,13 @@ int readFromCSVFiles(
     return lcounter;
 }
 
+class Point {
+public:
+    float x;
+    float y;
+    float z;
+};
+
 int main() {
     const int MAX_INIT_ARRAY_SIZE = 255;
     float gx[MAX_INIT_ARRAY_SIZE] = { 0.0 };
@@ -62,9 +69,31 @@ int main() {
     float ay[MAX_INIT_ARRAY_SIZE] = { 0.0 };
     float az[MAX_INIT_ARRAY_SIZE] = { 0.0 };
     float length[MAX_INIT_ARRAY_SIZE] = { 0.0 };
+    Point pl[MAX_INIT_ARRAY_SIZE];
 
     // init sensor data from CSV files
     int num = readFromCSVFiles("data/linear-motion-1.csv", gx, gy, gz, ax, ay, az, length);
 
+    // calculate the length of the each rolling step
+    for (int i = 0; i < num - 1; i++) {
+        length[i] = length[i+1] - length[i];
+    }
+    length[num - 1] = 0;
+
+    // init AHRSTracklet
+    AHRSMadgwick *filter = new AHRSMadgwick();
+    filter -> begin(10);
+    AHRSTracklet *tracklet = new AHRSTracklet(*filter);
+
+    // iterately update the points of the trajectory into pl
+    for (int i = 0; i < num; i++) {
+        tracklet -> update(gx[i], gy[i], gz[i], ax[i], ay[i], az[i], length[i]);
+        pl[i].x = tracklet -> getX();
+        pl[i].y = tracklet -> getY();
+        pl[i].z = tracklet -> getZ();
+        cout << "X: " << pl[i].x << " - Y: " << pl[i].y << " - Z: " << pl[i].z << " - Len: " << length[i] <<"\n";
+    }
+
+    // malloc memory for keeping all the points of trajectory
     cout << "Total points: " << num << "\n";
 }
