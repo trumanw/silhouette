@@ -20,25 +20,25 @@ int readFromCSVFiles(
             float val = (float)atof(cell.c_str());
             switch (ldelimiter) {
                 case 0:
-                    gx[lcounter-1] = val;
+                    length[lcounter-1] = val;
                     break;
                 case 1:
-                    gy[lcounter-1] = val;
+                    gx[lcounter-1] = val;
                     break;
                 case 2:
-                    gz[lcounter-1] = val;
+                    gy[lcounter-1] = val;
                     break;
                 case 3:
-                    ax[lcounter-1] = val;
+                    gz[lcounter-1] = val;
                     break;
                 case 4:
-                    ay[lcounter-1] = val;
+                    ax[lcounter-1] = val;
                     break;
                 case 5:
-                    az[lcounter-1] = val;
+                    ay[lcounter-1] = val;
                     break;
-                case 8:
-                    length[lcounter-1] = val;
+                case 6:
+                    az[lcounter-1] = val;
                     break;
                 default:
                     break;

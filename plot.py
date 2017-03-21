@@ -29,7 +29,7 @@ def UpdateLines(num, dataLines, lines):
     # return lines
 
 # read stdout from target program
-ps = Popen(('./silhouette line-bf-1.csv'), shell=True, stdout=PIPE, stderr=STDOUT)
+ps = Popen(('./silhouette line/line-1d-1490089995240.csv'), shell=True, stdout=PIPE, stderr=STDOUT)
 output, err = ps.communicate()
 
 # readline from the output string
@@ -42,19 +42,23 @@ ax = p3.Axes3D(fig)
 axlines = ax.plot(points[0, 0:1], points[1, 0:1], points[2, 0:1])[0]
 
 # Setting the axes properties
-ax.set_xlim3d([-100.0, 100.0])
+axUpper = int(np.max(points) + 1)
+axLower = int(np.min(points) - 1)
+ax.set_xlim3d([axLower, axUpper])
 ax.set_xlabel('X')
 
-ax.set_ylim3d([-100.0, 100.0])
+ax.set_ylim3d([axLower, axUpper])
 ax.set_ylabel('Y')
 
-ax.set_zlim3d([-100.0, 100.0])
+ax.set_zlim3d([axLower, axUpper])
 ax.set_zlabel('Z')
 
 ax.set_title('3D Test')
-
-# Creating the Animation object
-line_ani = animation.FuncAnimation(fig, UpdateLines, len(lines), fargs=(points, axlines),
-                                   interval=50, blit=False)
+print points
+print lines
+if 0 == len(points):
+    # Creating the Animation object
+    line_ani = animation.FuncAnimation(fig, UpdateLines, len(lines), fargs=(points, axlines),
+                                       interval=50, blit=False)
 
 plt.show()
