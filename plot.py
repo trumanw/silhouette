@@ -8,7 +8,6 @@ import matplotlib.animation as animation
 def GenPoints(lines):
     """
     Create a line using points list
-
     length is the number of points for the line.
     lines is the points list.
     """
@@ -54,11 +53,10 @@ ax.set_zlim3d([axLower, axUpper])
 ax.set_zlabel('Z')
 
 ax.set_title('3D Test')
-print points
-print lines
-if 0 == len(points):
+
+if len(points) != 0:
     # Creating the Animation object
     line_ani = animation.FuncAnimation(fig, UpdateLines, len(lines), fargs=(points, axlines),
-                                       interval=50, blit=False)
+                                   interval=50, blit=False)
 
 plt.show()
