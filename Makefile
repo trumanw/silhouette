@@ -1,6 +1,6 @@
 # the compiler: gcc for C program, define as g++ for C++
-CC = clang
-CXX = clang++
+CC = gcc
+CXX = g++
 
 # compiler flags:
 #  -g    adds debugging information to the executable file
@@ -10,7 +10,7 @@ CFLAGS  = -g -Wall -lstdc++
 # the build target executable:
 TARGET = silhouette
 CCSRC = $(wildcard src/lib/*.cc) \
-		$(wildcard src/*.cc)
+			$(wildcard src/*.cc)
 OBJ = $(CCSRC:.cc=.o)
 
 all: $(TARGET)
@@ -22,6 +22,6 @@ $(TARGET): $(OBJ)
 anim: $(TARGET)
 	python plot.py
 
-.PHONY: clean
+.PHONY: clean all
 clean:
 	$(RM) $(TARGET) $(OBJ)
