@@ -14,8 +14,8 @@
 // 02/10/2011	SOH Madgwick	Optimised for reduced CPU load
 //
 //=============================================================================================
-#ifndef AHRSMadgwick_h
-#define AHRSMadgwick_h
+#ifndef AHRSMADGWICK_H_
+#define AHRSMADGWICK_H_
 #include <math.h>
 
 //--------------------------------------------------------------------------------------------
