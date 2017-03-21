@@ -1,6 +1,8 @@
-#ifndef AHRSTracklet_h
-#define AHRSTracklet_h
+#ifndef AHRSTRACKLET_H_
+#define AHRSTRACKLET_H_
 #include <math.h>
+#include <iostream>
+#include <boost/math/quaternion.hpp>
 #include "AHRSMadgwick.h"
 
 class AHRSTracklet{
