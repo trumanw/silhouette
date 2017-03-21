@@ -11,6 +11,11 @@ run `make` to generate the executable file "silhouette".
 - The data format should look like this example:
 
 ```
-Gyro X,Gyro Y,Gyro Z,Accel X,Accel Y,Accel Z,Degree,Time,Length
-13.42,2.806,0.061,-0.147376,0.362828,0.8979199999999999,129,2043.2474399999999,223.21303322315137
+Length,Gyro X,Gyro Y,Gyro Z,Accel X,Accel Y,Accel Z
+   0.15,   1.77,  -0.06,   0.18,-0.39,-0.05, 0.92
+   0.22,   0.18,  -0.06,  -0.67,-0.39,-0.03, 0.91
+   0.37,   6.04,  -1.04,  -0.37,-0.41,-0.04, 0.92
 ```
+
+### Step 3 - build animation
+using command `make anim` to plot the 3D trajectory. See details in the plot.py file.
