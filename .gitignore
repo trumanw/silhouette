@@ -1,2 +1,4 @@
 # Files
+*.o
+.DS_Store
 silhouette
