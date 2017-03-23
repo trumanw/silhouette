@@ -19,8 +19,11 @@ public:
     AHRSTracklet(AHRSMadgwick rotor, float sampleFrequency);
     void begin(float sampleFrequency) { invSampleFreq = 1.0f / sampleFrequency; rotor.begin(sampleFrequency); }
     void update(float gx, float gy, float gz, float ax, float ay, float az, float length);
+    float convertRawAcceleration(int aRaw);
+    float convertRawGyro(int gRaw);
     float getX() { return q1; }
     float getY() { return q2; }
     float getZ() { return q3; }
+    ::boost::math::quaternion<float> toQuaternion(float pitch, float roll, float yaw);
 };
 #endif

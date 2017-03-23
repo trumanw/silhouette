@@ -247,3 +247,23 @@ void AHRSMadgwick::computeAngles()
 	yaw = atan2f(q1*q2 + q0*q3, 0.5f - q2*q2 - q3*q3);
 	anglesComputed = 1;
 }
+
+// void AHRSMadgwick::computeAngles() {
+// 	double ysqr = q2 * q2;
+//
+// 	// roll (x-axis rotation)
+// 	double t0 = +2.0 * (q1 * q0 + q2 * q3);
+// 	double t1 = +1.0 - 2.0 * (q1 * q1 + ysqr);
+// 	roll = atan2(t0, t1);
+//
+// 	// pitch (y-axis rotation)
+// 	double t2 = +2.0 * (q0 * q2 - q3 * q1);
+// 	t2 = t2 > 1.0 ? 1.0 : t2;
+// 	t2 = t2 < -1.0 ? -1.0 : t2;
+// 	pitch = asin(t2);
+//
+// 	// yaw (z-axis rotation)
+// 	double t3 = +2.0 * (q0 * q3 + q1 * q2);
+// 	double t4 = +1.0 - 2.0 * (ysqr + q3 * q3);
+// 	yaw = atan2(t3, t4);
+// }
