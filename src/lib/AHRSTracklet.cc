@@ -34,29 +34,31 @@ void AHRSTracklet::update(float gix, float giy, float giz, float aix, float aiy,
     // the product of rotor's quaternions and the unit quaternions v = (0, 0, 1, 0)
     // the rotated fomular should be q*v*q-1
     ::boost::math::quaternion<float> q(rotor.q0, rotor.q1, rotor.q2, rotor.q3);
-    ::boost::math::quaternion<float> qInverse(rotor.q0, rotor.q1, rotor.q2, rotor.q3);
     ::boost::math::quaternion<float> v(0.0, -1.0, 0.0, 0.0);
-    // Trace on the y-axis
-    // ::boost::math::quaternion<float> v(0.0, 0.0, length * 1.0, 0.0);
-    // Trace on the x-axis
-    // ::boost::math::quaternion<float> v(0.0, length * 1.0, 0.1, 0.1);
-    // Trace on the z-axis
-    // ::boost::math::quaternion<float> v(0.0, 0.0, 0.0, length * 1.0);
-    q *= v;
-    q /= qInverse;
-
     // roll 90 degrees to get the directional vector
     ::boost::math::quaternion<float> yawQ = toQuaternion(0.0, 0.0, 90.0);
-    ::boost::math::quaternion<float> yawQInverse = toQuaternion(0.0, 0.0, 90.0);
     yawQ *= q;
-    yawQ /= yawQInverse;
 
-    // std::cout << yawQ.R_component_2() << "," << yawQ.R_component_3() << "," << yawQ.R_component_4() << "\n";
+    ::boost::math::quaternion<float> rotor(yawQ.R_component_1(), yawQ.R_component_2(), yawQ.R_component_3(), yawQ.R_component_4());
+    ::boost::math::quaternion<float> rotorInverse(yawQ.R_component_1(), yawQ.R_component_2(), yawQ.R_component_3(), yawQ.R_component_4());
+
+    // print the euler angles
+    // float q0 = rotor.R_component_1();
+    // float q1 = rotor.R_component_2();
+    // float q2 = rotor.R_component_3();
+    // float q3 = rotor.R_component_4();
+    // float roll = atan2f(q0*q1 + q2*q3, 0.5f - q1*q1 - q2*q2);
+	// float pitch = asinf(-2.0f * (q1*q3 - q0*q2));
+	// float yaw = atan2f(q1*q2 + q0*q3, 0.5f - q2*q2 - q3*q3);
+    // std::cout << "PRY : " << pitch * 57.29578f << " - " << roll * 57.29578f << " - " << yaw * 57.29578f + 180.0f << "\n";
+
+    rotor *= v;
+    rotor /= rotorInverse;
 
     // accumulate quaternions on the tracklet
-    q1 += yawQ.R_component_2() * length;
-    q2 += yawQ.R_component_3();
-    q3 += yawQ.R_component_4();
+    q1 += rotor.R_component_2() * length;
+    q2 += rotor.R_component_3() + 1;
+    q3 += rotor.R_component_4();
 }
 
 ::boost::math::quaternion<float> AHRSTracklet::toQuaternion(float pitch, float roll, float yaw) {

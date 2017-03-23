@@ -29,7 +29,8 @@ def UpdateLines(num, dataLines, lines):
 
 # read stdout from target program
 # ps = Popen(('./silhouette line/line-1d-seg-1490089995240.csv'), shell=True, stdout=PIPE, stderr=STDOUT)
-ps = Popen(('./silhouette test/03.csv'), shell=True, stdout=PIPE, stderr=STDOUT)
+ps = Popen(('./silhouette test/01.csv'), shell=True, stdout=PIPE, stderr=STDOUT)
+# ps = Popen(('./silhouette line/line-quad-paral-1490238688927.csv'), shell=True, stdout=PIPE, stderr=STDOUT)
 output, err = ps.communicate()
 
 # readline from the output string
