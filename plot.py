@@ -28,7 +28,21 @@ def UpdateLines(num, dataLines, lines):
     # return lines
 
 # read stdout from target program
-ps = Popen(('./silhouette line/line-1d-seg-1490089995240.csv'), shell=True, stdout=PIPE, stderr=STDOUT)
+filedir = './build/'
+# filedir = './build/c/'
+filename = 'silhouette'
+
+# data = '25hz/00.csv'
+# data = '25hz/01.csv'
+# data = '25hz/02.csv'
+# data = '25hz/03.csv'
+# data = '25hz/04.csv'
+# data = '25hz/05.csv'
+data = '10hz/line-2d-2seg-00.csv'
+# data = '10hz/line-2d-2seg-01.csv'
+# data = '10hz/line-2d-2seg-02.csv'
+
+ps = Popen((filedir + filename + ' ' + data), shell=True, stdout=PIPE, stderr=STDOUT)
 output, err = ps.communicate()
 
 # readline from the output string
@@ -57,6 +71,6 @@ ax.set_title('3D Test')
 if len(points) != 0:
     # Creating the Animation object
     line_ani = animation.FuncAnimation(fig, UpdateLines, len(lines), fargs=(points, axlines),
-                                   interval=50, blit=False)
+                                   interval=5, blit=False)
 
 plt.show()

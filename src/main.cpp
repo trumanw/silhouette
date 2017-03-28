@@ -1,5 +1,25 @@
-#include "AHRS.h"
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
 using namespace std;
+
+#define _C_LIB_INCLUDE_
+// #define _CPP_LIB_INCLUDE_
+
+#define _SLERP_ENABLED_
+
+#ifdef _C_LIB_INCLUDE_
+extern "C" {
+#include "c/lib/ahrs_rotor.h"
+#include "c/lib/ahrs_tracklet.h"
+};
+#endif
+
+#ifdef _CPP_LIB_INCLUDE_
+#include "cpp/lib/ahrs_rotor.hpp"
+#include "cpp/lib/ahrs_tracklet.hpp"
+#endif
 
 int readFromCSVFiles(
     string filename, float * gx, float * gy, float * gz,
@@ -20,24 +40,26 @@ int readFromCSVFiles(
             float val = (float)atof(cell.c_str());
             switch (ldelimiter) {
                 case 0:
-                    length[lcounter-1] = val;
                     break;
                 case 1:
-                    gx[lcounter-1] = val;
+                    length[lcounter-1] = val;
                     break;
                 case 2:
-                    gy[lcounter-1] = val;
+                    gx[lcounter-1] = val;
                     break;
                 case 3:
-                    gz[lcounter-1] = val;
+                    gy[lcounter-1] = val;
                     break;
                 case 4:
-                    ax[lcounter-1] = val;
+                    gz[lcounter-1] = val;
                     break;
                 case 5:
-                    ay[lcounter-1] = val;
+                    ax[lcounter-1] = val;
                     break;
                 case 6:
+                    ay[lcounter-1] = val;
+                    break;
+                case 7:
                     az[lcounter-1] = val;
                     break;
                 default:
@@ -67,7 +89,8 @@ int main(int argc, char* argv[]) {
         filename = argv[1];
     }
 
-    const int MAX_INIT_ARRAY_SIZE = 255;
+    // don't want to malloc any memory here. So the max size should be changed manually based on the data samples.
+    const int MAX_INIT_ARRAY_SIZE = 500;
     float gx[MAX_INIT_ARRAY_SIZE] = { 0.0 };
     float gy[MAX_INIT_ARRAY_SIZE] = { 0.0 };
     float gz[MAX_INIT_ARRAY_SIZE] = { 0.0 };
@@ -86,8 +109,42 @@ int main(int argc, char* argv[]) {
     }
     length[num - 1] = 0;
 
+    #ifdef _C_LIB_INCLUDE_
+    // init the AHRS tracklet
+    #ifdef _SLERP_ENABLED_
+    int intplNum = 10;
+    AHRSTracklet * tracklet = newAHRSSlerpTracklet(intplNum);
+    #else
+    AHRSTracklet * tracklet = newAHRSTracklet();
+    #endif
+
+    // iterately update the points of the trajectory into pl
+    for (int i = 0; i < num-2; i++) {
+        tracklet -> update(tracklet, gx[i], gy[i], gz[i], ax[i], ay[i], az[i], length[i]);
+        if (tracklet -> rotor -> isSlerp) {
+            // enable to use SLERP interpolated points
+            for (int j = 0; j < (tracklet -> slerpNum) - 1; j++) {
+                cout << tracklet -> xSlerp[j] << "," \
+                    << tracklet -> ySlerp[j] << "," \
+                    << tracklet -> zSlerp[j] << "," \
+                    << length[i]/((tracklet -> slerpNum) - 1) << "\n";
+            }
+        } else {
+            // use points from sensor only
+            pl[i].x = tracklet -> getX(tracklet);
+            pl[i].y = tracklet -> getY(tracklet);
+            pl[i].z = tracklet -> getZ(tracklet);
+            cout << pl[i].x << "," << pl[i].y << "," << pl[i].z << "," << length[i] <<"\n";
+        }
+    }
+
+    // free the memory for the tracklet
+    deleteAHRSTracklet(tracklet);
+    #endif
+
+    #ifdef _CPP_LIB_INCLUDE_
     // init AHRSTracklet
-    AHRSMadgwick *filter = new AHRSMadgwick();
+    AHRSRotor *filter = new AHRSRotor();
     filter -> begin(10);
     AHRSTracklet *tracklet = new AHRSTracklet(*filter);
 
@@ -99,4 +156,5 @@ int main(int argc, char* argv[]) {
         pl[i].z = tracklet -> getZ();
         cout << pl[i].x << "," << pl[i].y << "," << pl[i].z << "," << length[i] <<"\n";
     }
+    #endif
 }

@@ -1,40 +1,10 @@
-//=============================================================================================
-// MadgwickAHRS.c
-//=============================================================================================
-//
-// Implementation of Madgwick's IMU and AHRS algorithms.
-// See: http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms/
-//
-// From the x-io website "Open-source resources available on this website are
-// provided under the GNU General Public Licence unless an alternative licence
-// is provided in source."
-//
-// Date			Author          Notes
-// 29/09/2011	SOH Madgwick    Initial release
-// 02/10/2011	SOH Madgwick	Optimised for reduced CPU load
-// 19/02/2012	SOH Madgwick	Magnetometer measurement is normalised
-//
-//=============================================================================================
-
-//-------------------------------------------------------------------------------------------
-// Header files
-
-#include "AHRSMadgwick.h"
+#include "ahrs_rotor.hpp"
 #include <math.h>
 
-//-------------------------------------------------------------------------------------------
-// Definitions
-
-#define sampleFreqDef   10.0f          // sample frequency in Hz
+#define sampleFreqDef   25.0f          // sample frequency in Hz
 #define betaDef         0.1f            // 2 * proportional gain
 
-//============================================================================================
-// Functions
-
-//-------------------------------------------------------------------------------------------
-// AHRS algorithm update
-
-AHRSMadgwick::AHRSMadgwick() {
+AHRSRotor::AHRSRotor() {
 	beta = betaDef;
 	q0 = 1.0f;
 	q1 = 0.0f;
@@ -44,7 +14,7 @@ AHRSMadgwick::AHRSMadgwick() {
 	anglesComputed = 0;
 }
 
-void AHRSMadgwick::update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
+void AHRSRotor::update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
 	float recipNorm;
 	float s0, s1, s2, s3;
 	float qDot1, qDot2, qDot3, qDot4;
@@ -149,7 +119,7 @@ void AHRSMadgwick::update(float gx, float gy, float gz, float ax, float ay, floa
 //-------------------------------------------------------------------------------------------
 // IMU algorithm update
 
-void AHRSMadgwick::updateIMU(float gx, float gy, float gz, float ax, float ay, float az) {
+void AHRSRotor::updateIMU(float gx, float gy, float gz, float ax, float ay, float az) {
 	float recipNorm;
 	float s0, s1, s2, s3;
 	float qDot1, qDot2, qDot3, qDot4;
@@ -227,7 +197,7 @@ void AHRSMadgwick::updateIMU(float gx, float gy, float gz, float ax, float ay, f
 // Fast inverse square-root
 // See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
 
-float AHRSMadgwick::invSqrt(float x) {
+float AHRSRotor::invSqrt(float x) {
 	float halfx = 0.5f * x;
 	float y = x;
 	long i = *(long*)&y;
@@ -240,7 +210,7 @@ float AHRSMadgwick::invSqrt(float x) {
 
 //-------------------------------------------------------------------------------------------
 
-void AHRSMadgwick::computeAngles()
+void AHRSRotor::computeAngles()
 {
 	roll = atan2f(q0*q1 + q2*q3, 0.5f - q1*q1 - q2*q2);
 	pitch = asinf(-2.0f * (q1*q3 - q0*q2));
